@@ -1,3 +1,3 @@
 ## CC Project
 
-Press the picture to make the number go up
+Click on your picture and then click on an animal to see a mix of you and the animal

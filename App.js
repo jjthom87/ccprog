@@ -14,53 +14,150 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
 export default class App extends Component<{}> {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      carterCounter: 0,
-      cooperCounter: 0
+      selected: undefined,
+      lcSelected: undefined,
+      animal: undefined,
+      startOver: undefined
     };
   }
-  incrementCarter(){
+  selectCarter(){
     this.setState({
-      carterCounter: this.state.carterCounter + 1
+      selected: 'Carter',
+      lcSelected: 'carter',
+      startOver: undefined
     })
   }
-  incrementCooper(){
+  selectCooper(){
     this.setState({
-      cooperCounter: this.state.cooperCounter + 1
+      selected: 'Cooper',
+      lcSelected: 'cooper',
+      startOver: undefined
+    })
+  }
+  selectDinosaur(){
+    this.setState({
+      animal: 'dinosaur'
+    })
+  }
+  selectBird(){
+    this.setState({
+      animal: 'eagle'
+    })
+  }
+  startOver(){
+    this.setState({
+      selected: undefined,
+      lcSelected: undefined,
+      animal: undefined,
+      startOver: 'y'
     })
   }
   render() {
-    console.log(this.state.cooperCounter);
-    console.log(this.state.carterCounter);
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          What's up Cooper & Carter
-        </Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
-            <TouchableOpacity onPress={this.incrementCarter.bind(this)}>
-              <Image style={styles.image} source={require('./images/carter.png')}/>
-              <Text>{this.state.carterCounter}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
-            <TouchableOpacity onPress={this.incrementCooper.bind(this)}>
-              <Image style={styles.image} source={require('./images/cooper.png')}/>
-              <Text>{this.state.cooperCounter}</Text>
-            </TouchableOpacity>
+    const renderBeginning = () => {
+      return (
+        <View>
+          <Text style={styles.welcome}>
+            What's up Cooper & Carter, who is playing?
+          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+              <TouchableOpacity onPress={this.selectCarter.bind(this)}>
+                <Image style={styles.image} source={require('./images/carter.png')}/>
+                <Text>{this.state.carterCounter}</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+              <TouchableOpacity onPress={this.selectCooper.bind(this)}>
+                <Image style={styles.image} source={require('./images/cooper.png')}/>
+                <Text>{this.state.cooperCounter}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
+      )   
+    }
+    const prePick = () => {
+      if(!this.state.selected && !this.state.animal){
+        return (
+          <View>
+            <Text style={styles.welcome}>
+              What's up Cooper & Carter, who is playing?
+            </Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                <TouchableOpacity onPress={this.selectCarter.bind(this)}>
+                  <Image style={styles.image} source={require('./images/carter.png')}/>
+                  <Text>{this.state.carterCounter}</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                <TouchableOpacity onPress={this.selectCooper.bind(this)}>
+                  <Image style={styles.image} source={require('./images/cooper.png')}/>
+                  <Text>{this.state.cooperCounter}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        )   
+      } else if (this.state.selected && !this.state.animal){
+        return (
+          <View>
+            <Text style={styles.welcome}>Hey {this.state.selected}, what animal do you want to be?</Text>
+              <TouchableOpacity onPress={this.selectDinosaur.bind(this)}>
+                <Text style={styles.welcome}>T-Rex</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.selectBird.bind(this)}>
+                <Text style={styles.welcome}>Eagle</Text>
+              </TouchableOpacity>
+          </View>
+        )
+      } else {
+        if(this.state.selected === "Carter" && this.state.animal === 'eagle'){
+          return (
+            <View>
+              <Image style={styles.carterEagle} source={require('./images/carter_eagle.jpg')}/>
+              <TouchableOpacity onPress={this.startOver.bind(this)}>
+                <Text style={styles.welcome}>Start Over</Text>
+              </TouchableOpacity>
+            </View>
+          )
+        } else if (this.state.selected === "Carter" && this.state.animal === 'dinosaur'){
+          return (
+            <View>
+              <Image style={styles.carterDinosaur} source={require('./images/carter_dinosaur.jpg')}/>
+              <TouchableOpacity onPress={this.startOver.bind(this)}>
+                <Text style={styles.welcome}>Start Over</Text>
+              </TouchableOpacity>
+            </View> 
+          )
+        } else if (this.state.selected === "Cooper" && this.state.animal === 'dinosaur'){
+          return (
+            <View>
+              <Image style={styles.animalImage} source={require('./images/cooper_dinosaur.jpg')}/>
+              <TouchableOpacity onPress={this.startOver.bind(this)}>
+                <Text style={styles.welcome}>Start Over</Text>
+              </TouchableOpacity>
+            </View> 
+          )
+        } else if (this.state.selected === "Cooper" && this.state.animal === 'eagle'){
+          return (
+            <View>
+              <Image style={styles.animalImage} source={require('./images/cooper_eagle.jpg')}/>
+              <TouchableOpacity onPress={this.startOver.bind(this)}>
+                <Text style={styles.welcome}>Start Over</Text>
+              </TouchableOpacity>
+            </View> 
+          )
+        }
+      }
+    }
+    return (
+      <View style={styles.container}>
+        {prePick()}
       </View>
     );
   }
@@ -88,5 +185,17 @@ const styles = StyleSheet.create({
     width: 50,
     margin: '10%',
     backgroundColor: 'powderblue'
+  },
+  animalImage: {
+    height: 200,
+    width: 300
+  },
+  carterEagle: {
+    height: 250,
+    width: 250
+  },
+  carterDinosaur: {
+    height: 150,
+    width: 300
   }
 });
